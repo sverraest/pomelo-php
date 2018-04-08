@@ -1,0 +1,124 @@
+<?php
+
+namespace PomeloPHP;
+
+use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Psr7\Response;
+
+class Client
+{
+    const POMELO_DEVICE_ID = 'API';
+    const POMELO_API_VERSION = '1.0';
+    const POMELO_SANDBOX_ENDPOINT = 'https://sandbox.pomelopay.com/api/';
+    const POMELO_PRODUCTION_ENDPOINT = 'https://app.pomelopay.com/api/';
+
+    /**
+     * @var \GuzzleHttp\Client
+     */
+    private $httpClient;
+
+    /**
+     * @var string
+     */
+    private $apiKey;
+
+    /**
+     * @var string
+     */
+    private $mode;
+
+    /**
+     * @var array
+     */
+    private $clientOptions;
+
+    /**
+     * @var string
+     */
+    private $baseUrl;
+
+    /**
+     * @var Transactions
+     */
+    public $transactions;
+
+
+    /**
+     * Client constructor.
+     * @param string $apiKey
+     * @param string $mode
+     * @param array $clientOptions
+     */
+    public function __construct(string $apiKey, $mode = 'production', array $clientOptions = [])
+    {
+        $this->apiKey = $apiKey;
+        $this->mode = $mode;
+        $this->baseUrl = ($mode === 'production' ? self::POMELO_PRODUCTION_ENDPOINT : self::POMELO_SANDBOX_ENDPOINT);
+        $this->clientOptions = $clientOptions;
+
+        $this->initiateHttpClient();
+
+        $this->transactions = new Transactions($this);
+    }
+
+    /**
+     * @param GuzzleClient $client
+     */
+    public function setClient(GuzzleClient $client)
+    {
+        $this->httpClient = $client;
+    }
+
+    /**
+     * Initiates the HttpClient with required headers
+     */
+    private function initiateHttpClient()
+    {
+        $options = [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $this->apiKey,
+            ]
+        ];
+
+        $this->httpClient = new GuzzleClient(array_replace_recursive($this->clientOptions, $options));
+    }
+
+    private function buildBaseUrl()
+    {
+        return $this->baseUrl;
+    }
+
+    /**
+     * @param Response $response
+     * @return mixed
+     */
+    private function handleResponse(Response $response)
+    {
+        $stream = \GuzzleHttp\Psr7\stream_for($response->getBody());
+        $data = json_decode($stream);
+
+        return $data;
+    }
+
+    /**
+     * @param $endpoint
+     * @param $json
+     * @return mixed
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function post($endpoint, $json)
+    {
+        $response = $this->httpClient->request('POST', $this->buildBaseUrl().$endpoint, ['json' => $json]);
+        return $this->handleResponse($response);
+    }
+
+    /**
+     * @param $endpoint
+     * @return mixed
+     */
+    public function get($endpoint)
+    {
+        $response = $this->httpClient->request('GET', $this->buildBaseUrl().$endpoint);
+        return $this->handleResponse($response);
+    }
+}
