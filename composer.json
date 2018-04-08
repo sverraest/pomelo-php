@@ -1,0 +1,31 @@
+{
+    "name": "sverraest/pomelo-php",
+    "description": "PHP Bindings for the Pomelo Pay API",
+    "keywords": ["pomelo", "pomelopay", "pay", "appfleet", "php", "api"],
+    "type": "library",
+    "require": {
+        "guzzlehttp/guzzle": "~6.0",
+        "php": ">= 7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "PomeloPHP\\": ["src"]
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~5.0",
+        "squizlabs/php_codesniffer": "^3.1",
+        "roave/security-advisories": "dev-master"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Simon Verraest",
+            "email": "simon@appfleet.uk"
+        }
+    ],
+    "scripts": {
+        "test": "./vendor/bin/phpunit -c ./phpunit.xml ./test --coverage-clover=coverage.xml",
+        "phpcs": "./vendor/bin/phpcs --standard=PSR2 ./src/*"
+    }
+}
