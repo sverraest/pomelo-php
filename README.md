@@ -122,7 +122,7 @@ header('Location: '. $transaction["forwardUrl"]); // Go to transaction payment p
 ```
 ### Pagination
 
-The Pomelo Page API offers a flexible pagination structure for GET requests on collections.
+The Pomelo Pay API offers a flexible pagination structure for GET requests on collections.
 The following query filters are possible for pagination.
 The default page number is 1.
 
