@@ -4,6 +4,9 @@
 [![codecov](https://codecov.io/gh/sverraest/pomelo-php/branch/master/graph/badge.svg)](https://codecov.io/gh/sverraest/pomelo-php)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sverraest/pomelo-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sverraest/pomelo-php/?branch=master)
 [![Maintainability](https://api.codeclimate.com/v1/badges/ef5f5dd14aeac02f0daf/maintainability)](https://codeclimate.com/github/sverraest/pomelo-php/maintainability)
+[![Latest Stable Version](https://poser.pugx.org/sverraest/pomelo-php/v/stable)](https://packagist.org/packages/sverraest/pomelo-php)
+[![License](https://poser.pugx.org/sverraest/pomelo-php/license)](https://packagist.org/packages/sverraest/pomelo-php)
+[![composer.lock](https://poser.pugx.org/sverraest/pomelo-php/composerlock)](https://packagist.org/packages/sverraest/pomelo-php)
 
 > PHP API Client and bindings for the Pomelo Pay API
 
