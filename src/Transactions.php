@@ -48,5 +48,4 @@ class Transactions
     {
         return $this->client->post(self::ENDPOINT, $json);
     }
-
 }

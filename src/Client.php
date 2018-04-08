@@ -7,7 +7,6 @@ use GuzzleHttp\Psr7\Response;
 
 class Client
 {
-    const POMELO_DEVICE_ID = 'API';
     const POMELO_API_VERSION = '1.0';
     const POMELO_SANDBOX_ENDPOINT = 'https://sandbox.pomelopay.com/api/';
     const POMELO_PRODUCTION_ENDPOINT = 'https://app.pomelopay.com/api/';
@@ -21,6 +20,11 @@ class Client
      * @var string
      */
     private $apiKey;
+
+    /**
+     * @var string
+     */
+    private $appId;
 
     /**
      * @var string
@@ -46,12 +50,14 @@ class Client
     /**
      * Client constructor.
      * @param string $apiKey
+     * @param string $appId
      * @param string $mode
      * @param array $clientOptions
      */
-    public function __construct(string $apiKey, $mode = 'production', array $clientOptions = [])
+    public function __construct(string $apiKey, string $appId, $mode = 'production', array $clientOptions = [])
     {
         $this->apiKey = $apiKey;
+        $this->appId = $appId;
         $this->mode = $mode;
         $this->baseUrl = ($mode === 'production' ? self::POMELO_PRODUCTION_ENDPOINT : self::POMELO_SANDBOX_ENDPOINT);
         $this->clientOptions = $clientOptions;
@@ -76,6 +82,8 @@ class Client
     {
         $options = [
             'headers' => [
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
                 'Authorization' => 'Bearer ' . $this->apiKey,
             ]
         ];
@@ -108,6 +116,9 @@ class Client
      */
     public function post($endpoint, $json)
     {
+        $json['deviceId'] = $this->appId;
+        $json['appVersion'] = self::POMELO_API_VERSION;
+
         $response = $this->httpClient->request('POST', $this->buildBaseUrl().$endpoint, ['json' => $json]);
         return $this->handleResponse($response);
     }
