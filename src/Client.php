@@ -124,12 +124,46 @@ class Client
     }
 
     /**
-     * @param $endpoint
+     * @param string $endpoint
+     * @param array $pagination
      * @return mixed
      */
-    public function get($endpoint)
+    public function get(string $endpoint, array $pagination = [])
     {
-        $response = $this->httpClient->request('GET', $this->buildBaseUrl().$endpoint);
+        $response = $this->httpClient->request(
+            'GET',
+            $this->applyPagination($this->buildBaseUrl().$endpoint, $pagination)
+        );
+
         return $this->handleResponse($response);
+    }
+
+    /**
+     * @param string $url
+     * @param array $pagination
+     * @return string
+     */
+    private function applyPagination(string $url, array $pagination)
+    {
+        if (count($pagination)) {
+            return $url.'?'.http_build_query($this->cleanPagination($pagination));
+        }
+
+        return $url;
+    }
+
+    /**
+     * @param array $pagination
+     * @return array
+     */
+    private function cleanPagination(array $pagination)
+    {
+        $allowed = [
+            'page',
+            'pagination',
+            'itemsPerPage',
+        ];
+
+        return array_intersect_key($pagination, array_flip($allowed));
     }
 }

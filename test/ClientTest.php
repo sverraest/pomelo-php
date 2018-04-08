@@ -80,4 +80,57 @@ class ClientTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    public function testApplyPagination()
+    {
+        $pagination = [
+            'pagination' => 1,
+            'itemsPerPage' => 5,
+            'page' => 2,
+        ];
+
+        $mock = new MockHandler([new Response(200, ['X-Foo' => 'Bar'], "{\"foo\":\"bar\"}")]);
+        $container = [];
+        $history = Middleware::history($container);
+        $stack = HandlerStack::create($mock);
+        $stack->push($history);
+        $http_client = new Client(['handler' => $stack]);
+        $client = new PomeloPHP\Client('foo' , 'bar');
+        $client->setClient($http_client);
+
+        $client->transactions->all($pagination);
+
+        foreach ($container as $transaction) {
+            $this->assertEquals(http_build_query($pagination), $transaction['request']->getUri()->getQuery());
+        }
+
+    }
+
+    public function testcleanPagination()
+    {
+        $pagination = [
+            'foo' => 'bar',
+            'pagination' => 1,
+            'page' => 2,
+            'itemsPerPage' => 5,
+        ];
+
+        $mock = new MockHandler([new Response(200, ['X-Foo' => 'Bar'], "{\"foo\":\"bar\"}")]);
+        $container = [];
+        $history = Middleware::history($container);
+        $stack = HandlerStack::create($mock);
+        $stack->push($history);
+        $http_client = new Client(['handler' => $stack]);
+        $client = new PomeloPHP\Client('foo' , 'bar');
+        $client->setClient($http_client);
+
+        $client->transactions->all($pagination);
+
+        foreach ($container as $transaction) {
+            $this->assertEquals(
+                'pagination=1&page=2&itemsPerPage=5',
+                $transaction['request']->getUri()->getQuery()
+            );
+        }
+
+    }
 }

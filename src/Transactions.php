@@ -21,12 +21,12 @@ class Transactions
     }
 
     /**
-     * @param array $filters
+     * @param array $pagination
      * @return mixed
      */
-    public function all($filters = [])
+    public function all($pagination = [])
     {
-        return $this->client->get('transactions?'.http_build_query($filters));
+        return $this->client->get('transactions', $pagination);
     }
 
     /**
