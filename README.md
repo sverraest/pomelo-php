@@ -148,6 +148,6 @@ $all = $client->transactions->all([
 
 ## About
 
-➡️ You can follow me on 🐦 [Twitter](https://www.twitter.com/simondoestech) or ✉️ email me at simon[-at-]appfleet.uk.
+➡️ You can follow me on 🐦 [Twitter](https://www.twitter.com/simondoestech) or ✉️ email me at simon[-at-]pomelopay.com.
 
 ⭐ Sign up as a merchant at https://pomelopay.com and start receiving payments in seconds.
