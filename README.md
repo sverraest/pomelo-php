@@ -8,7 +8,7 @@
 [![License](https://poser.pugx.org/sverraest/pomelo-php/license)](https://packagist.org/packages/sverraest/pomelo-php)
 [![composer.lock](https://poser.pugx.org/sverraest/pomelo-php/composerlock)](https://packagist.org/packages/sverraest/pomelo-php)
 
-> PHP API Client and bindings for the Pomelo Pay API
+> PHP API Client and bindings for the [Pomelo Pay API](https://github.com/PomeloPay/pomelo-apidoc)
 
 Using this PHP API Client you can interact with your Pomelo Pay:
 - 💳 __Transactions__
