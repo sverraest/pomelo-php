@@ -26,8 +26,6 @@
         }
     ],
     "scripts": {
-        "test": "./vendor/bin/phpunit -c ./phpunit.xml ./test --coverage-clover=coverage.xml",
-        "phpcs": "./vendor/bin/phpcs --standard=PSR2 ./src/*",
-        "stan" : "./vendor/bin/phpstan analyse --level=7 ./src"
+        "test": "./vendor/bin/phpunit -c ./phpunit.xml ./test --coverage-clover=coverage.xml && ./vendor/bin/phpcs --standard=PSR2 ./src/* && ./vendor/bin/phpstan analyse --level=7 ./src"
     }
 }
