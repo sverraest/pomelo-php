@@ -2,6 +2,9 @@
 
 namespace PomeloPHP;
 
+use PomeloPHP\Crypt\Signature;
+use PomeloPHP\Model\Transaction;
+
 class Transactions
 {
     const ENDPOINT = 'transactions';
@@ -21,31 +24,14 @@ class Transactions
     }
 
     /**
-     * @param array $pagination
-     * @return mixed
-     */
-    public function all($pagination = [])
-    {
-        return $this->client->get('transactions', $pagination);
-    }
-
-    /**
-     * @param string $id
-     * @return mixed
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function get(string $id)
-    {
-        return $this->client->get(self::ENDPOINT.'/'.$id);
-    }
-
-    /**
      * @param array $json
      * @return mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function create(array $json)
     {
+        $transaction = (new Transaction())->fromArray($json);
+        $json['signature'] = (new Signature($transaction, $this->client->getApiKey()))->sign();
         return $this->client->post(self::ENDPOINT, $json);
     }
 }

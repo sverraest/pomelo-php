@@ -7,9 +7,11 @@ use GuzzleHttp\Psr7\Response;
 
 class Client
 {
-    const POMELO_API_VERSION = '1.0';
-    const POMELO_SANDBOX_ENDPOINT = 'https://sandbox.pomelopay.com/api/';
-    const POMELO_PRODUCTION_ENDPOINT = 'https://app.pomelopay.com/api/';
+    const POMELO_API_VERSION = '2.0';
+    const POMELO_APP_VERSION = 'pomelo-php';
+    const POMELO_SIGN_METHOD = 'sha1';
+    const POMELO_SANDBOX_ENDPOINT = 'https://api.sandbox.pomelopay.com/';
+    const POMELO_PRODUCTION_ENDPOINT = 'https://api.pomelopay.com/';
 
     /**
      * @var \GuzzleHttp\Client
@@ -84,7 +86,7 @@ class Client
             'headers' => [
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
-                'Authorization' => 'Bearer ' . $this->apiKey,
+                'Authorization' =>  $this->apiKey,
             ]
         ];
 
@@ -116,8 +118,9 @@ class Client
      */
     public function post($endpoint, $json)
     {
-        $json['deviceId'] = $this->appId;
-        $json['appVersion'] = self::POMELO_API_VERSION;
+        $json['apiVersion'] = self::POMELO_API_VERSION;
+        $json['appVersion'] = self::POMELO_APP_VERSION;
+        $json['signMethod'] = self::POMELO_SIGN_METHOD;
 
         $response = $this->httpClient->request('POST', $this->buildBaseUrl().$endpoint, ['json' => $json]);
         return $this->handleResponse($response);
@@ -160,10 +163,16 @@ class Client
     {
         $allowed = [
             'page',
-            'pagination',
-            'itemsPerPage',
         ];
 
         return array_intersect_key($pagination, array_flip($allowed));
+    }
+
+    /**
+     * @return string
+     */
+    public function getApiKey()
+    {
+        return $this->apiKey;
     }
 }
