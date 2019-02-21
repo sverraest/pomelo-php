@@ -86,24 +86,7 @@ Get all transactions, get information about a specific transaction, create a new
 ## Usage details
 
 ### 💳 Transactions
-#### Get all transactions
-
-```php
-use PomeloPHP\Client;
-
-$client = new Client('apikey', 'appid');
-$transactions = $client->transactions->all();
-```
-#### Get one transaction
-
-```php
-use PomeloPHP\Client;
-
-$client = new Client('apikey', 'appid');
-$transaction = $client->transactions->get('foo');
-```
-
-#### Create transaction
+#### Create transaction with a specific payment method
 
 ```php
 use PomeloPHP\Client;
@@ -111,43 +94,33 @@ use PomeloPHP\Client;
 $client = new Client('apikey', 'appid');
 
 $json = [
- "provider" => "POMELO", // Provider enabled for your merchant account such as POMELO, BANCONTACT, ALIPAY, etc...
+ "provider" => "alipay", // Payment method enabled for your merchant account such as bcmc, alipay, card
  "currency" => "GBP",
  "amount" => 1000, // 10.00 GBP
  "redirectUrl" => "https://foo.bar/order/123" // Optional redirect after payment completion
 ];
 
 $transaction = $client->transactions->create($json);
-header('Location: '. $transaction["forwardUrl"]); // Go to transaction payment page
+header('Location: '. $transaction["url"]); // Go to transaction payment page
 ```
-### Pagination
 
-The Pomelo Pay API offers a flexible pagination structure for GET requests on collections.
-The following query filters are possible for pagination.
-The default page number is 1.
-
-
-
-| Query                     | Values                                                               |
-| --------------------------|----------------------------------------------------------------------| 
-| pagination                | 0 or 1 (disabled pagination, is enabled by default)                  |
-| page                      | 1,2,3,4,... (page of the collection, default is 1)                   |
-| itemsPerPage              | 20 (numbers of items per page, default is 20)                        |
+#### Create transaction without a payment method that will redirect to the payment method selection screen
 
 ```php
 use PomeloPHP\Client;
 
 $client = new Client('apikey', 'appid');
 
-$subSet = $client->transactions->all([
-  "page" => 3,  // We're on page 3
-  "itemsPerPage" => 5 // We're displaying 5 items per page
-]);
+$json = [
+ "currency" => "GBP",
+ "amount" => 1000, // 10.00 GBP
+ "redirectUrl" => "https://foo.bar/order/987" // Optional redirect after payment completion
+];
 
-$all = $client->transactions->all([
-  "pagination" => 0 // Don't paginate the results
-]); 
+$transaction = $client->transactions->create($json);
+header('Location: '. $transaction["url"]); // Go to payment method selection screen
 ```
+
 
 ## About
 
