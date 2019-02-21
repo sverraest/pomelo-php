@@ -81,7 +81,7 @@ See below for more details about each resource.
 
 💳 __Transactions__
 
-Get all transactions, get information about a specific transaction, create a new transaction.
+Create a new transaction with or without a specific payment method.
 
 ## Usage details
 
